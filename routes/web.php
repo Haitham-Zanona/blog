@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard.index');
 });
 
 Route::get('/dashboard', function () {
@@ -26,6 +27,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+
+Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.'], function() {
+    Route::get('/charts', function () {
+        return view('dashboard.layouts.charts');
+    })->name('charts');
+    Route::get('/settings', function () {
+        return view('dashboard.settings');
+    })->name('settings');
 });
 
 require __DIR__.'/auth.php';
