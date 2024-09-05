@@ -13,7 +13,7 @@
                  <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                      <a class="btn btn-secondary" href="#"><i class="icon-speech"></i></a>
                      <a class="btn btn-secondary" href="./"><i class="icon-graph"></i> &nbsp;Dashboard</a>
-                     <a class="btn btn-secondary" href="{{ route('settings') }}"><i class="icon-settings"></i> &nbsp;{{ __('words.settings') }}</a>
+                     <a class="btn btn-secondary" href="#"><i class="icon-settings"></i> &nbsp;{{ __('words.settings') }}</a>
                  </div>
              </li>
          </ol>

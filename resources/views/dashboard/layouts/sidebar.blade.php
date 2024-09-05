@@ -46,7 +46,7 @@
                 <a class="nav-link" href="widgets.html"><i class="icon-calculator"></i> Widgets <span class="tag tag-info">NEW</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('charts') }}"><i class="icon-pie-chart"></i> {{ trans('words.Charts') }}</a>
+                <a class="nav-link" href="#"><i class="icon-pie-chart"></i> {{ trans('words.Charts') }}</a>
             </li>
             <li class="divider"></li>
             <li class="nav-title">
