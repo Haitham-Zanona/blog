@@ -1,8 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ViewController;
+use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ViewController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,13 +34,22 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.'], function() {
+Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.', 'middleware' => ['auth', 'checkLogin']], function() {
+    Route::get('/',function(){
+        return view('dashboard.layouts.layout');
+    })->name('dashboard');
     Route::get('/charts', function () {
         return view('dashboard.layouts.charts');
     })->name('charts');
     Route::get('/settings', function () {
         return view('dashboard.settings');
     })->name('settings');
+    Route::post('/settings/update/{setting}', [SettingController::class, 'update'])
+        ->name('settings.update');
+
+    Route::resources([
+        'users' => UserController::class,
+    ]);
 });
 
 require __DIR__.'/auth.php';
