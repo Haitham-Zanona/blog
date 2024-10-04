@@ -22,6 +22,10 @@
     <link href="{{ asset('adminassets/css/simple-line-icons.css') }}" rel="stylesheet">
     <!-- Main styles for this application -->
     <link href="{{ asset('adminassets/dest/style.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
 </head>
 <!-- BODY options, add following classes to body to change options
          1. 'compact-nav'     	  - Switch sidebar to minified version (width 50px)
@@ -450,6 +454,19 @@
 
     <!-- Grunt watch plugin -->
     <script src="//localhost:35729/livereload.js"></script>
+
+    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+         $(document).ready(function() {
+             $('#table_id').dataTable({
+                 processing:true,
+            });
+         });
+    </script>
+    @stack('javascripts')
 </body>
 
 </html>

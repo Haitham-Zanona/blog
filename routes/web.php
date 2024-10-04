@@ -47,9 +47,27 @@ Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.', 'middleware' => ['auth
     Route::post('/settings/update/{setting}', [SettingController::class, 'update'])
         ->name('settings.update');
 
+    Route::get('/users/all', [UserController::class, 'getUsersDatatable'])->name('users.all');
+    Route::post('/users/delete', [UserController::class, 'delete'])->name('users.delete');
+
+
+
+    // Route::get('/category/all', [CategoryController::class, 'getCategoriesDatatable'])->name('category.all');
+    // Route::post('/category/delete', [CategoryController::class, 'delete'])->name('category.delete');
+
+
+
+    // Route::get('/posts/all', [PostsController::class, 'getPostsDatatable'])->name('posts.all');
+    // Route::post('/posts/delete', [PostsController::class, 'delete'])->name('posts.delete');
+
+
     Route::resources([
         'users' => UserController::class,
+        // 'category' => CategoryController::class,
+        // 'posts' => PostsController::class,
     ]);
+
+
 });
 
 require __DIR__.'/auth.php';
