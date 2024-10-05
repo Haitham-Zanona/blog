@@ -41,7 +41,7 @@ class UserController extends Controller
 
             $data = User::where('id', auth()->user()->id);
         }
-        $dataTable = Datatables::of($data)
+        return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function($row){
                 $btn = '';
@@ -56,12 +56,11 @@ class UserController extends Controller
                 return $btn;
             })
             ->addColumn('status', function ($row) {
-                return $row->status == null ? __('words.not activated') : '';
+                return $row->status == null ? __('words.not activated') : __('words.' . $row->status);
             })
             ->rawColumns(['action', 'status'])
             ->make(true);
 
-            return $dataTable;
     }
 
     /**
@@ -97,7 +96,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
         $this->authorize('update', $user);
         return view('dashboard.users.edit', compact('user'));
