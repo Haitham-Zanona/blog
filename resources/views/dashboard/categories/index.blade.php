@@ -5,7 +5,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#">{{ __('words.dashboard') }}</a>
         </li>
-        <li class="breadcrumb-item active">__('words.users')</li>
+        <li class="breadcrumb-item active">{{ __('words.categories') }}</li>
     </ol>
 
 
@@ -20,10 +20,8 @@
                     <table class="table table-striped" id="table_id">
                         <thead>
                             <tr>
-                                <th>Username</th>
-                                <th>Date registered</th>
-                                <th>Role</th>
-                                <th>Status</th>
+                                <th>Category</th>
+                                <th>Parent</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -86,22 +84,15 @@
             var table = $('#table_id').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ Route('dashboard.users.all') }}",
-                columns: [{
-                        data: 'id',
-                        name: 'id'
+                ajax: "{{ Route('dashboard.category.all') }}",
+                columns: [
+                    {
+                        data: 'title',
+                        name: 'title'
                     },
                     {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status',
+                        data: 'parent',
+                        name: 'parent'
                     },
                     {
                         data: 'action',

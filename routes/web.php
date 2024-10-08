@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Dashboard\SettingController;
-use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,8 +53,8 @@ Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.', 'middleware' => ['auth
 
 
 
-    // Route::get('/category/all', [CategoryController::class, 'getCategoriesDatatable'])->name('category.all');
-    // Route::post('/category/delete', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::get('/category/all', [CategoryController::class, 'getCategoriesDatatable'])->name('category.all');
+    Route::post('/category/delete', [CategoryController::class, 'delete'])->name('category.delete');
 
 
 
@@ -63,7 +64,7 @@ Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.', 'middleware' => ['auth
 
     Route::resources([
         'users' => UserController::class,
-        // 'category' => CategoryController::class,
+        'category' => CategoryController::class,
         // 'posts' => PostsController::class,
     ]);
 

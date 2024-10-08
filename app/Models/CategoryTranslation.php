@@ -11,5 +11,11 @@ class CategoryTranslation extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'category_id', 'locale','title', 'content'];
+    protected $fillable = ['title', 'content'];
+
+    /* public function getTitleAttribute()
+    {
+        return $this->title;
+    } */
+
 }
