@@ -1,10 +1,9 @@
-
 @extends('dashboard.layouts.layout')
 
 @section('body')
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">{{__('words.dashboard')}}</li>
+        <li class="breadcrumb-item">{{ __('words.dashboard') }}</li>
         <li class="breadcrumb-item"><a href="#">{{ __('words.categories') }}</a>
         </li>
         <li class="breadcrumb-item active">{{ __('words.add user') }}</li>
@@ -19,10 +18,11 @@
         </li>
     </ol>
 
+
     <div class="container-fluid">
 
         <div class="animated fadeIn">
-            <form action="{{ Route('dashboard.category.update' , $category) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ Route('dashboard.posts.update' , $post) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -43,35 +43,34 @@
 
 
 
-                            <img src="{{asset($category->image)}}" alt="" height="50px;">
+
+                            <div class="form-group col-md-12">
+                               <img src="{{asset($post->image)}}" alt="" style="height: 50px">
+                            </div>
+
 
                             <div class="form-group col-md-12">
                                 <label>{{ __('words.image') }}</label>
-                                <input type="file" name="image" class="form-control" placeholder="{{ __('words.image') }}"
-                                   >
+                                <input type="file" name="image" class="form-control"
+                                    placeholder="{{ __('words.image') }}">
                             </div>
 
 
 
                             <div class="form-group col-md-12">
                                 <label>{{ __('words.status') }}</label>
-                                <select name="parent" id="" class="form-control">
-                                    <option value="0"  @if ($category->parent == 0 || $category->parent == null)
-                                        selected
-                                    @endif>قسم رئيسي</option>
-                                    @foreach ($categories as $item)
-                                    @if ($item->id != $category->id)
-
-
-                                    <option @if ($category->parent ==  $item->id)
-                                        selected
-                                    @endif value="{{$item->id}}">{{$item->title}}</option>
-                                    @endif
+                                <select name="category_id" id="" class="form-control" required>
+                                    @foreach ($categories as $category)
+                                        <option  @selected($post->category_id == $category->id) value="{{ $category->id }}">{{ $category->title }}</option>
                                     @endforeach
                                 </select>
 
                             </div>
                         </div>
+
+
+
+
 
                         <div class="card">
                             <div class="card-header">
@@ -96,39 +95,31 @@
                                             <br>
                                             <div class="form-group mt-3 col-md-12">
                                                 <label>{{ __('words.title') }} - {{ $lang }}</label>
-                                                <input type="text" name="{{$key}}[title]" class="form-control"
-                                                    placeholder="{{ __('words.title') }}" value="{{$category->translate($key)->title}}">
+                                                <input type="text" name="{{ $key }}[title]" class="form-control"
+                                                    placeholder="{{ __('words.title') }}" value="{{$post->translate($key)->title}}">
                                             </div>
 
                                             <div class="form-group col-md-12">
+                                                <label>{{ __('words.smallDesc') }}</label>
+                                                <textarea name="{{ $key }}[smallDesc]" class="form-control" id="editor" cols="50" rows="10">{{$post->translate($key)->smallDesc}}</textarea>
+                                            </div>
+
+
+                                            <div class="form-group col-md-12">
                                                 <label>{{ __('words.content') }}</label>
-                                                <textarea name="{{$key}}[content]" class="form-control" cols="30" rows="10">{{$category->translate($key)->content}}</textarea>
+                                                <textarea name="{{ $key }}[content]" class="form-control" id="editor" cols="50" rows="10">{{$post->translate($key)->content}}</textarea>
+                                            </div>
+                                            
+
+                                            <div class="form-group col-md-12">
+                                                <label>{{ __('words.tags') }}</label>
+                                                <textarea name="{{ $key }}[tags]" class="form-control" id="" >{{$post->translate($key)->tags}}</textarea>
                                             </div>
                                         </div>
                                     @endforeach
-
                                 </div>
-
-
-
                             </div>
-
-
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>
-                                    Submit</button>
-                                <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i>
-                                    Reset</button>
-                            </div>
-
                         </div>
-
-
-
-
-
-
-
                         <div class="card-footer">
                             <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>
                                 Submit</button>

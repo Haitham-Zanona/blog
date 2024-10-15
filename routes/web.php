@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\Dashboard\PostsController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\CategoryController;
 
@@ -58,14 +59,14 @@ Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.', 'middleware' => ['auth
 
 
 
-    // Route::get('/posts/all', [PostsController::class, 'getPostsDatatable'])->name('posts.all');
-    // Route::post('/posts/delete', [PostsController::class, 'delete'])->name('posts.delete');
+    Route::get('/posts/all', [PostsController::class, 'getPostsDatatable'])->name('posts.all');
+    Route::post('/posts/delete', [PostsController::class, 'delete'])->name('posts.delete');
 
 
     Route::resources([
         'users' => UserController::class,
         'category' => CategoryController::class,
-        // 'posts' => PostsController::class,
+        'posts' => PostsController::class,
     ]);
 
 
