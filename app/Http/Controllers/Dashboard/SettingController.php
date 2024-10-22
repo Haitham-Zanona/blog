@@ -14,7 +14,9 @@ class SettingController extends Controller
      */
     public function index()
     {
-        //
+        $setting = Setting::first();
+        $this->authorize('view', $setting);
+        return view('dashboard.settings');
     }
 
     /**

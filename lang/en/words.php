@@ -43,7 +43,7 @@ return [
     'delete'=>'delete',
     'sure delete'=>'sure delete',
     'post'=>'post',
-    ''=>'',
+    'Home'=>'Home',
     ''=>'',
     ''=>'',
     ''=>'',

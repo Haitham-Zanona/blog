@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\PostsController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\CategoryController;
+use App\Models\Setting;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,9 +44,8 @@ Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.', 'middleware' => ['auth
     Route::get('/charts', function () {
         return view('dashboard.layouts.charts');
     })->name('charts');
-    Route::get('/settings', function () {
-        return view('dashboard.settings');
-    })->name('settings');
+
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
     Route::post('/settings/update/{setting}', [SettingController::class, 'update'])
         ->name('settings.update');
 
