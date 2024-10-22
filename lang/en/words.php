@@ -42,7 +42,7 @@ return [
     'close'=>'close',
     'delete'=>'delete',
     'sure delete'=>'sure delete',
-    ''=>'',
+    'post'=>'post',
     ''=>'',
     ''=>'',
     ''=>'',

@@ -84,9 +84,16 @@
             var table = $('#table_id').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ Route('dashboard.category.all') }}",
-                columns: [
-                    {
+                ajax: {
+                    url: "{{ route('dashboard.category.all') }}", // Ensure this matches your route
+                    type: 'GET',
+                    error: function(xhr, error, thrown) {
+                        console.error('Error: ' + error);
+                        console.error('XHR: ' + xhr.responseText);
+                        alert('An error occurred while fetching data. Please try again.');
+                    }
+                },
+                columns: [{
                         data: 'title',
                         name: 'title'
                     },

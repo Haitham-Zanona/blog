@@ -59,7 +59,7 @@ class CategoryController extends Controller
 
         $data = Category::select('*')->with('parents');
 
-        return Datatables::of($data)
+        $category = Datatables::of($data)
             ->addIndexColumn()
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
@@ -85,6 +85,7 @@ class CategoryController extends Controller
             ->rawColumns(['action', 'status', 'title'])
             ->make(true);
 
+            // return datatables()->of($category)->toJson();
 
 
     }

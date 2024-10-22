@@ -60,6 +60,8 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav pull-left hidden-md-down">
+                <li class="nav-item dropdown" style="margin-left: 10px !important">
+                    {{ auth()->user()->name }}({{ auth()->user()->status }})</li>
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="icon-bell"></i><span
                             class="tag tag-pill tag-danger">5</span></a>
@@ -70,7 +72,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" style="padding: 0 7px;">
                     <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
                         aria-haspopup="true" aria-expanded="false">
                         <img src="{{ asset('adminassets/img/avatars/6.jpg') }}" class="img-avatar"
@@ -111,6 +113,24 @@
                         </form>
                     </div>
                 </li>
+
+                <li class="nav-item dropdown" style="padding: 0 7px;">
+                    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">
+                        <span class="hidden-md-down">{{ LaravelLocalization::getCurrentLocaleNative() }}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+
+                        @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                            <a class="dropdown-item" rel="alternate" hreflang="{{ $localeCode }}"
+                                href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                {{ $properties['native'] }}
+                            </a>
+                        @endforeach
+
+                    </div>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link navbar-toggler aside-toggle" href="#">&#9776;</a>
                 </li>
