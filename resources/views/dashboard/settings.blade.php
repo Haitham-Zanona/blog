@@ -2,14 +2,8 @@
 
 @section('body')
     <!-- Breadcrumb -->
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">{{__('words.dashboard')}}</li>
-        <li class="breadcrumb-item"><a href="#">{{__('words.dashboard')}}</a>
-        </li>
-        <li class="breadcrumb-item active">داشبرد</li>
+    {{ Breadcrumbs::render(('setting')) }}
 
-
-    </ol>
 
 
     {{-- {{dd($setting)}} --}}

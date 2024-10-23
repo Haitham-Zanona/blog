@@ -2,11 +2,7 @@
 
 @section('body')
     <!-- Breadcrumb -->
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">{{ __('words.dashboard') }}</a>
-        </li>
-        <li class="breadcrumb-item active">{{ __('words.categories') }}</li>
-    </ol>
+    {{ Breadcrumbs::render(('category')) }}
 
 
     <div class="container-fluid">

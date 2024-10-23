@@ -3,21 +3,8 @@
 
 @section('body')
     <!-- Breadcrumb -->
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">{{__('words.dashboard')}}</li>
-        <li class="breadcrumb-item"><a href="#">{{ __('words.categories') }}</a>
-        </li>
-        <li class="breadcrumb-item active">{{ __('words.add user') }}</li>
+    {{ Breadcrumbs::render(('category')) }}
 
-        <!-- Breadcrumb Menu-->
-        <li class="breadcrumb-menu">
-            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                <a class="btn btn-secondary" href="#"><i class="icon-speech"></i></a>
-                <a class="btn btn-secondary" href="./"><i class="icon-graph"></i> &nbsp;{{ __('words.categories') }}</a>
-                <a class="btn btn-secondary" href="#"><i class="icon-settings"></i> &nbsp;{{ __('words.add user') }}</a>
-            </div>
-        </li>
-    </ol>
 
     <div class="container-fluid">
 

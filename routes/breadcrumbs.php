@@ -13,10 +13,20 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push('Home', route('dashboard.dashboard'));
 });
 
-// Home > Blog
-Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
+// Home > Dashboard
+Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Blog', route('dashboard.category.index'));
+    $trail->push('Dashboard', route('dashboard.dashboard'));
+});
+// Home > Setting
+Breadcrumbs::for('setting', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Setting', route('dashboard.settings'));
+});
+// Home > Blog
+Breadcrumbs::for('post', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Post', route('dashboard.posts.index'));
 });
 
 // Home > Blog > [Category]

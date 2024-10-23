@@ -4,7 +4,7 @@
 @extends('dashboard.layouts.layout')
 
 @section('body')
-{{ Breadcrumbs::render(('home')) }}
+{{ Breadcrumbs::render(('dashboard')) }}
 
     <div class="container-fluid">
 

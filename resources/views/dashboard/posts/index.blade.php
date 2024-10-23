@@ -2,25 +2,8 @@
 
 @section('body')
     <!-- Breadcrumb -->
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">{{ __('words.dashboard') }}</li>
-        <li class="breadcrumb-item"><a href="#">{{ __('words.dashboard') }}</a>
-        </li>
-        <li class="breadcrumb-item active">{{ __('words.categories') }}</li>
+    {{ Breadcrumbs::render(('post')) }}
 
-        <!-- Breadcrumb Menu-->
-        <li class="breadcrumb-menu">
-            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                <a class="btn btn-secondary" href="#"><i class="icon-speech"></i></a>
-                <a class="btn btn-secondary" href="./"><i class="icon-graph"></i> &nbsp;{{ __('words.dashboard') }}</a>
-                <a class="btn btn-secondary" href="#"><i class="icon-settings"></i>
-                    &nbsp;{{ __('words.categories') }}</a>
-            </div>
-        </li>
-    </ol>
-
-
-    {{-- {{dd($setting)}} --}}
 
     <div class="container-fluid">
 
