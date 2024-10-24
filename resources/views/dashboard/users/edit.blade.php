@@ -3,7 +3,7 @@
 @section('body')
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">{{__('words.dashboard')}}</li>
+        <li class="breadcrumb-item">{{ __('words.dashboard') }}</li>
         <li class="breadcrumb-item"><a href="#">{{ __('words.users') }}</a>
         </li>
         <li class="breadcrumb-item active">{{ $user->name }}</li>
@@ -46,8 +46,8 @@
 
                             <div class="form-group col-md-12">
                                 <label>{{ __('words.name') }}</label>
-                                <input type="text" name="name" class="form-control" placeholder="{{ __('words.name') }}"
-                                    value="{{ $user->name }}">
+                                <input type="text" name="name" class="form-control"
+                                    placeholder="{{ __('words.name') }}" value="{{ $user->name }}">
                             </div>
                             <div class="form-group col-md-12">
                                 <label>{{ __('words.email') }}</label>
@@ -56,24 +56,17 @@
                             </div>
 
                             @can('viewAny', $user)
+                                <div class="form-group col-md-12">
+                                    <label>{{ __('words.status') }}</label>
+                                    <select name="status" id="" class="form-control">
 
+                                        <option value="admin" @if ($user->status == 'admin') selected @endif>Admin</option>
+                                        <option value="writer" @if ($user->status == 'Writer') selected @endif>Writer</option>
+                                        <option value="" @if ($user->status == '') selected @endif>غير مفعل
+                                        </option>
+                                    </select>
 
-                            <div class="form-group col-md-12">
-                                <label>{{ __('words.status') }}</label>
-                                <select name="status" id="" class="form-control">
-
-                                    <option value="admin" @if ($user->status == 'admin')
-                                        selected
-                                    @endif>Admin</option>
-                                    <option value="writer" @if ($user->status == 'Writer')
-                                        selected
-                                    @endif>Writer</option>
-                                    <option value="" @if ($user->status == '')
-                                        selected
-                                    @endif>غير مفعل </option>
-                                </select>
-
-                            </div>
+                                </div>
                             @endcan
                         </div>
 

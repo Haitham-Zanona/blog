@@ -12,11 +12,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="CoreUI Bootstrap 4 Admin Template">
-    <meta name="author" content="Lukasz Holeczek">
-    <meta name="keyword" content="CoreUI Bootstrap 4 Admin Template">
-    <!-- <link rel="shortcut icon" href="assets/ico/favicon.png"> -->
-    <title>blog</title>
+    <meta name="description" content="{{ $setting->translate(app()->getLocale())->content }}">
+    <meta name="author" content="{{ $setting->translate(app()->getLocale())->title }}">
+    <meta name="keyword" content="{{ $setting->translate(app()->getLocale())->title }}">
+    <link rel="shortcut icon" href="{{ $setting->favicon }}">
+    <title>{{ $setting->translate(app()->getLocale())->title }}</title>
     <!-- Icons -->
     <link href="{{ asset('adminassets/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('adminassets/css/simple-line-icons.css') }}" rel="stylesheet">
@@ -43,7 +43,18 @@
     <header class="navbar">
         <div class="container-fluid">
             <button class="navbar-toggler mobile-toggler hidden-lg-up" type="button">&#9776;</button>
-            <a class="navbar-brand" href="#"></a>
+            <a class="navbar-brand" href="#"
+                style="background-image: url({{ asset($setting->logo) }}); background-size: 45px 45px;  background-position: left;">
+                <h4 class="text-center"
+                    style="
+                margin-top: 8px;
+                padding-right: 30px;
+                color: #263238;
+                font-size: 28px;
+                font-weight: 600;
+            ">Blog
+                </h4>
+            </a>
             <ul class="nav navbar-nav hidden-md-down">
                 <li class="nav-item">
                     <a class="nav-link navbar-toggler layout-toggler" href="#">&#9776;</a>
@@ -115,8 +126,8 @@
                 </li>
 
                 <li class="nav-item dropdown" style="padding: 0 7px;">
-                    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
-                        aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="hidden-md-down">{{ LaravelLocalization::getCurrentLocaleNative() }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
@@ -491,14 +502,11 @@
             ClassicEditor.create(allEditors[i]);
         }
 
-         $(document).ready(function() {
-             $('#table_id').dataTable({
-                 processing:true,
+        $(document).ready(function() {
+            $('#table_id').dataTable({
+                processing: true,
             });
-         });
-
-
-
+        });
     </script>
     @stack('javascripts')
 </body>

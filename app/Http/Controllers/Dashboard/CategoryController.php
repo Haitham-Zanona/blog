@@ -30,6 +30,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $this->authorize('viewAny', $this->setting);
         $categories = Category::whereNull('parent')->orWhere('parent',0)->get();
         return view('dashboard.categories.add', compact('categories'));
     }
@@ -39,6 +40,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('viewAny', $this->setting);
         $category = Category::create($request->except('image', '_token'));
 
         if ($request->file('image')) {
@@ -54,9 +56,6 @@ class CategoryController extends Controller
 
     public function getCategoriesDatatable()
     {
-
-
-
         $data = Category::select('*')->with('parents');
 
         $category = Datatables::of($data)
@@ -103,6 +102,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        $this->authorize('viewAny', $this->setting);
         $categories = Category::whereNull('parent')->orWhere('parent',0)->get();
 
         return view('dashboard.categories.add', compact('category', 'categories'));
@@ -113,6 +113,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        $this->authorize('viewAny', $this->setting);
         $category->update($request->except('image', '__token'));
 
         if ($request->file('image')) {

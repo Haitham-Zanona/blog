@@ -30,7 +30,7 @@ Breadcrumbs::for('post', function (BreadcrumbTrail $trail) {
 });
 
 // Home > Blog > [Category]
-Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category) {
-    $trail->parent('blog');
-    $trail->push($category->title, route('category', $category));
+Breadcrumbs::for('category', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Category', route('dashboard.category.index'));
 });
