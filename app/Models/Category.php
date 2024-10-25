@@ -22,7 +22,7 @@ class Category extends Model implements TranslatableContract
         return $this->belongsTo(Category::class, 'parent');
     }
     public function children() {
-        return $this->belongsTo(Category::class, 'parent');
+        return $this->hasMany(Category::class, 'parent');
     }
     public function posts() {
         return $this->hasMany(Post::class);

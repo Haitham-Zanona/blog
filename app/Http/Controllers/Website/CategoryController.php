@@ -9,10 +9,12 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function show(Category $category) {
+    public function show(Category $category)
+    {
         $category = $category->load('children');
-        $posts = Post::where('category_id', $category->id)->paginate(15);
+        dd($category);
+        $posts = Post::where('category_id' , $category->id)->paginate(15);
 
-        return view('website.category', compact('category', 'posts'));
+        return view('website.category' , compact('category','posts'));
     }
 }

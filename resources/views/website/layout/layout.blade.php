@@ -69,7 +69,7 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="{{route('index')}}" class="nav-item nav-link active">{{ __('words.home') }}</a>
+                    <a href="{{route('index')}}" class="nav-item nav-link active">{{ __('words.Home') }}</a>
                     @foreach ($categories as $category)
                         <div class="nav-item dropdown">
                             <a  @if (count($category->children) == 0) href="{{Route('category',$category->id)}}" @else href='#' @endif class="nav-link  @if (count($category->children) > 0) dropdown-toggle  @endif"
@@ -96,7 +96,7 @@
                 </div>
 
 
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" style="list-style-type: none;">
                     <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
                         aria-haspopup="true" aria-expanded="false">
                         <span class="hidden-md-down">{{ LaravelLocalization::getCurrentLocaleNative() }}</span>
