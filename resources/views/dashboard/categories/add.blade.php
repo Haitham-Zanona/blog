@@ -2,7 +2,7 @@
 
 @section('body')
     <!-- Breadcrumb -->
-    {{ Breadcrumbs::render(('category')) }}
+    {{ Breadcrumbs::render('category') }}
 
 
 
@@ -84,6 +84,13 @@
                                                 <textarea name="{{ $key }}[content]" class="form-control" cols="30" rows="10"></textarea>
                                             </div>
 
+
+
+                                            <div>
+                                                <label>{{ __('words.slug') }}</label>
+                                                <input type="text" name="{{ $key }}[slug]"
+                                                    class="form-control" placeholder="{{ __('words.slug') }}">
+                                            </div>
                                         </div>
                                     @endforeach
 
@@ -100,14 +107,6 @@
                                 <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i>
                                     Reset</button>
                             </div>
-
-                        </div>
-
-
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>
-                                Submit</button>
 
                         </div>
 

@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
+use App\Models\Post;
 use App\Models\Setting;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,10 +23,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $settings = Setting::checkSettings();
-
-        view()->share([
-            'setting' => $settings,
-        ]);
+        if (!app()->runningInConsole()) {
+            Paginator::useBootstrap();
+            $settings = Setting::checkSettings();
+            $categories = Category::with('children')->where('parent', 0)->orWhere('parent', null)->get();
+            $lastFivePosts = Post::with('category', 'user')->orderBy('id')->limit(5)->get();
+            view()->share([
+                'setting' => $settings,
+                'categories' => $categories,
+                'lastFivePosts' => $lastFivePosts,
+            ]);
+        }
     }
 }

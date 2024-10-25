@@ -1,14 +1,16 @@
 <?php
 
+use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Website\IndexController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\PostsController;
+use App\Http\Controllers\Website\CategoryController;
 use App\Http\Controllers\Dashboard\SettingController;
-use App\Http\Controllers\Dashboard\CategoryController;
-use App\Models\Setting;
+use App\Http\Controllers\Website\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +23,16 @@ use App\Models\Setting;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard.index');
-});
+
+// Website
+
+Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('category');
+Route::get('/post/{post}', [PostController::class, 'show'])->name('post');
+
+
+
+// Dashboard
 
 Route::get('/dashboard', function () {
     return view('dashboard');

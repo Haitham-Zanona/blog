@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Models\Setting;
-use App\Models\Category;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\CategoryTranslation;
+use App\Models\Setting;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
     protected $setting;
-    public function __construct(Setting $setting) {
+    public function __construct(Setting $setting)
+    {
         $this->setting = $setting;
     }
 
@@ -31,7 +32,7 @@ class CategoryController extends Controller
     public function create()
     {
         $this->authorize('viewAny', $this->setting);
-        $categories = Category::whereNull('parent')->orWhere('parent',0)->get();
+        $categories = Category::whereNull('parent')->orWhere('parent', 0)->get();
         return view('dashboard.categories.add', compact('categories'));
     }
 
@@ -49,6 +50,13 @@ class CategoryController extends Controller
             $file->move(public_path('images'), $filename);
             $path = 'images/' . $filename;
             $category->update(['image' => $path]);
+        }
+
+        foreach (config('app.languages') as $key => $lang) {
+            $slug = $request->$key['title'];
+            CategoryTranslation::where('category_id', $category->id)->where('locale', $key)->update([
+                'slug' => Str::slug($slug),
+            ]);
         }
 
         return redirect()->route('dashboard.category.index');
@@ -69,10 +77,9 @@ class CategoryController extends Controller
                         <a id="deleteBtn" data-id="' . $row->id . '" class="edit btn btn-danger btn-sm"  data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></a>';
                 }
 
-
             })
             ->addColumn('parent', function ($row) {
-                return ($row->parent ==  0) ? trans('words.main category') :   $row->parents->translate(app()->getLocale())->title;
+                return ($row->parent == 0) ? trans('words.main category') : $row->parents->translate(app()->getLocale())->title;
             })
             ->addColumn('title', function ($row) {
                 // return $row->translate(app()->getLocale())->title();
@@ -84,8 +91,7 @@ class CategoryController extends Controller
             ->rawColumns(['action', 'status', 'title'])
             ->make(true);
 
-            // return datatables()->of($category)->toJson();
-
+        // return datatables()->of($category)->toJson();
 
     }
 
@@ -103,7 +109,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $this->authorize('viewAny', $this->setting);
-        $categories = Category::whereNull('parent')->orWhere('parent',0)->get();
+        $categories = Category::whereNull('parent')->orWhere('parent', 0)->get();
 
         return view('dashboard.categories.add', compact('category', 'categories'));
     }
@@ -124,8 +130,19 @@ class CategoryController extends Controller
             $category->update(['image' => $path]);
         }
 
+        foreach (config('app.languages') as $key => $lang) {
+            $slug = $request->$key['title'];
+            CategoryTranslation::where('category_id', $category->id)->where('locale', $key)->update([
+                'slug' => $this->createSlug($slug),
+            ]);
+        }
+
         return redirect()->route('dashboard.category.index');
 
+    }
+
+    public function createSlug($text) {
+        return str_replace(' ','-',$text);
     }
 
     /**
@@ -136,7 +153,8 @@ class CategoryController extends Controller
         //
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
         $this->authorize('viewAny', $this->setting);
         if (is_numeric($request->id)) {
             Category::where('parent', $request->id)->delete();
