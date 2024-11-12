@@ -2,14 +2,14 @@
 
 @section('body')
     <!-- Breadcrumb -->
-    {{ Breadcrumbs::render(('post')) }}
+    {{ Breadcrumbs::render('post') }}
 
 
 
     <div class="container-fluid">
 
         <div class="animated fadeIn">
-            <form action="{{ Route('dashboard.posts.update' , $post) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ Route('dashboard.posts.update', $post) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -24,7 +24,7 @@
                     @endif
                     <div class="card">
                         <div class="card-header">
-                            <strong>{{ __('words.users') }}</strong>
+                            <strong>{{ __('words.post') }}</strong>
                         </div>
                         <div class="card-block">
 
@@ -32,7 +32,7 @@
 
 
                             <div class="form-group col-md-12">
-                               <img src="{{asset($post->image)}}" alt="" style="height: 50px">
+                                <img src="{{ asset($post->image) }}" alt="" style="height: 50px">
                             </div>
 
 
@@ -48,7 +48,8 @@
                                 <label>{{ __('words.status') }}</label>
                                 <select name="category_id" id="" class="form-control" required>
                                     @foreach ($categories as $category)
-                                        <option  @selected($post->category_id == $category->id) value="{{ $category->id }}">{{ $category->title }}</option>
+                                        <option @selected($post->category_id == $category->id) value="{{ $category->id }}">
+                                            {{ $category->title }}</option>
                                     @endforeach
                                 </select>
 
@@ -80,27 +81,28 @@
                                         <div class="tab-pane mt-3 fade @if ($loop->index == 0) show active in @endif"
                                             id="{{ $key }}" role="tabpanel" aria-labelledby="home-tab">
                                             <br>
-                                            <div class="form-group mt-3 col-md-12">
+                                            <div class="mt-3 form-group col-md-12">
                                                 <label>{{ __('words.title') }} - {{ $lang }}</label>
-                                                <input type="text" name="{{ $key }}[title]" class="form-control"
-                                                    placeholder="{{ __('words.title') }}" value="{{$post->translate($key)->title}}">
+                                                <input type="text" name="{{ $key }}[title]"
+                                                    class="form-control" placeholder="{{ __('words.title') }}"
+                                                    value="{{ $post->translate($key)->title }}">
                                             </div>
 
                                             <div class="form-group col-md-12">
                                                 <label>{{ __('words.smallDesc') }}</label>
-                                                <textarea name="{{ $key }}[smallDesc]" class="form-control" id="editor" cols="50" rows="10">{{$post->translate($key)->smallDesc}}</textarea>
+                                                <textarea name="{{ $key }}[smallDesc]" class="form-control" id="editor" cols="50" rows="10">{{ $post->translate($key)->smallDesc }}</textarea>
                                             </div>
 
 
                                             <div class="form-group col-md-12">
                                                 <label>{{ __('words.content') }}</label>
-                                                <textarea name="{{ $key }}[content]" class="form-control" id="editor" cols="50" rows="10">{{$post->translate($key)->content}}</textarea>
+                                                <textarea name="{{ $key }}[content]" class="form-control" id="editor" cols="50" rows="10">{{ $post->translate($key)->content }}</textarea>
                                             </div>
 
 
                                             <div class="form-group col-md-12">
                                                 <label>{{ __('words.tags') }}</label>
-                                                <textarea name="{{ $key }}[tags]" class="form-control" id="" >{{$post->translate($key)->tags}}</textarea>
+                                                <textarea name="{{ $key }}[tags]" class="form-control" id="">{{ $post->translate($key)->tags }}</textarea>
                                             </div>
                                         </div>
                                     @endforeach

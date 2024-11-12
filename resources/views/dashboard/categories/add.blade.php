@@ -73,8 +73,8 @@
                                         <div class="tab-pane mt-3 fade @if ($loop->index == 0) show active in @endif"
                                             id="{{ $key }}" role="tabpanel" aria-labelledby="home-tab">
                                             <br>
-                                            <div class="form-group mt-3 col-md-12">
-                                                <label>{{ trans('words.email') }} - {{ $lang }}</label>
+                                            <div class="mt-3 form-group col-md-12">
+                                                <label>{{ trans('words.title') }} - {{ $lang }}</label>
                                                 <input type="text" name="{{ $key }}[title]"
                                                     class="form-control" placeholder="{{ trans('words.title') }}">
                                             </div>
@@ -88,8 +88,8 @@
 
                                             <div>
                                                 <label>{{ __('words.slug') }}</label>
-                                                <input type="text" name="{{ $key }}[slug]"
-                                                    class="form-control" placeholder="{{ __('words.slug') }}">
+                                                <input type="text" name="{{ $key }}[slug]" class="form-control"
+                                                    placeholder="{{ __('words.slug') }}">
                                             </div>
                                         </div>
                                     @endforeach

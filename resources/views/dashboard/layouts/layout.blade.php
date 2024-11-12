@@ -43,16 +43,14 @@
     <header class="navbar">
         <div class="container-fluid">
             <button class="navbar-toggler mobile-toggler hidden-lg-up" type="button">&#9776;</button>
-            <a class="navbar-brand" href="#"
-                style="background-image: url({{ asset($setting->logo) }}); background-size: 45px 45px;  background-position: left;">
-                <h4 class="text-center"
-                    style="
+            <a class="navbar-brand" href="{{ route('index') }}"
+                style="background-image: url({{ asset($setting->logo) }}); background-size: 220px 180px;  background-position: center;">
+                <h4 class="text-center" {{-- style="
                 margin-top: 8px;
                 padding-right: 30px;
                 color: #263238;
                 font-size: 28px;
-                font-weight: 600;
-            ">Blog
+                font-weight: 600;" --}}>
                 </h4>
             </a>
             <ul class="nav navbar-nav hidden-md-down">
@@ -84,7 +82,7 @@
                     <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
                 </li>
                 <li class="nav-item dropdown" style="padding: 0 7px;">
-                    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                         aria-haspopup="true" aria-expanded="false">
                         <img src="{{ asset('adminassets/img/avatars/6.jpg') }}" class="img-avatar"
                             alt="admin@bootstrapmaster.com">
@@ -126,8 +124,8 @@
                 </li>
 
                 <li class="nav-item dropdown" style="padding: 0 7px;">
-                    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#"
-                        role="button" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">
                         <span class="hidden-md-down">{{ LaravelLocalization::getCurrentLocaleNative() }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">

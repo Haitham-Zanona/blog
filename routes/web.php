@@ -1,16 +1,14 @@
 <?php
 
-use App\Models\Setting;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ViewController;
+use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\PostsController;
+use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Website\IndexController;
-use App\Http\Controllers\Dashboard\UserController;
-use App\Http\Controllers\Dashboard\PostsController;
-use App\Http\Controllers\Website\CategoryController;
-use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Website\PostController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,16 +19,13 @@ use App\Http\Controllers\Website\PostController;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
-
+ */
 
 // Website
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('category');
 Route::get('/post/{post}', [PostController::class, 'show'])->name('post');
-
-
 
 // Dashboard
 
@@ -44,10 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
-Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.', 'middleware' => ['auth', 'checkLogin']], function() {
-    Route::get('/',function(){
+Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => ['auth', 'checkLogin']], function () {
+    Route::get('/', function () {
         return view('dashboard.layouts.layout');
     })->name('dashboard');
     Route::get('/charts', function () {
@@ -61,16 +54,11 @@ Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.', 'middleware' => ['auth
     Route::get('/users/all', [UserController::class, 'getUsersDatatable'])->name('users.all');
     Route::post('/users/delete', [UserController::class, 'delete'])->name('users.delete');
 
-
-
     Route::get('/category/all', [CategoryController::class, 'getCategoriesDatatable'])->name('category.all');
     Route::post('/category/delete', [CategoryController::class, 'delete'])->name('category.delete');
 
-
-
     Route::get('/posts/all', [PostsController::class, 'getPostsDatatable'])->name('posts.all');
     Route::post('/posts/delete', [PostsController::class, 'delete'])->name('posts.delete');
-
 
     Route::resources([
         'users' => UserController::class,
@@ -78,10 +66,9 @@ Route::group(['prefix'=>'dashboard' , 'as'=>'dashboard.', 'middleware' => ['auth
         'posts' => PostsController::class,
     ]);
 
-
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Auth::routes();
 

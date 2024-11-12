@@ -2,11 +2,7 @@
 
 @section('body')
     <!-- Breadcrumb -->
-    <{{ Breadcrumbs::render(('post')) }}
-
-
-
-    <div class="container-fluid">
+    <{{ Breadcrumbs::render('post') }} <div class="container-fluid">
 
         <div class="animated fadeIn">
             <form action="{{ Route('dashboard.posts.store') }}" method="post" enctype="multipart/form-data">
@@ -24,7 +20,7 @@
                     @endif
                     <div class="card">
                         <div class="card-header">
-                            <strong>{{ __('words.users') }}</strong>
+                            <strong>{{ __('words.post') }}</strong>
                         </div>
                         <div class="card-block">
 
@@ -75,10 +71,10 @@
                                         <div class="tab-pane mt-3 fade @if ($loop->index == 0) show active in @endif"
                                             id="{{ $key }}" role="tabpanel" aria-labelledby="home-tab">
                                             <br>
-                                            <div class="form-group mt-3 col-md-12">
+                                            <div class="mt-3 form-group col-md-12">
                                                 <label>{{ __('words.title') }} - {{ $lang }}</label>
-                                                <input type="text" name="{{ $key }}[title]" class="form-control"
-                                                    placeholder="{{ __('words.title') }}">
+                                                <input type="text" name="{{ $key }}[title]"
+                                                    class="form-control" placeholder="{{ __('words.title') }}">
                                             </div>
 
                                             <div class="form-group col-md-12">
@@ -95,7 +91,7 @@
 
                                             <div class="form-group col-md-12">
                                                 <label>{{ __('words.tags') }}</label>
-                                                <textarea name="{{ $key }}[tags]" class="form-control" id="" ></textarea>
+                                                <textarea name="{{ $key }}[tags]" class="form-control" id=""></textarea>
                                             </div>
                                         </div>
                                     @endforeach
@@ -113,5 +109,5 @@
                     </div>
             </form>
         </div>
-    </div>
-@endsection
+        </div>
+    @endsection
