@@ -2,7 +2,7 @@
 
 @section('body')
     <!-- Breadcrumb -->
-    {{ Breadcrumbs::render(('category')) }}
+    {{ Breadcrumbs::render('category') }}
 
 
     <div class="container-fluid">
@@ -38,10 +38,9 @@
 
 
     {{-- delete --}}
-    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form action="{{ Route('dashboard.users.delete') }}" method="POST">
+            <form action="{{ Route('dashboard.category.delete') }}" method="POST">
                 <div class="modal-content">
 
                     <div class="modal-body">
@@ -70,25 +69,17 @@
 @endsection
 @push('javascripts')
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(function() {
 
             // Destroy any existing instance
             if ($.fn.DataTable.isDataTable('#table_id')) {
-                $('#table_id').DataTable().destroy();
+                $('#table_id').DataTable().clear().destroy();
             }
 
             var table = $('#table_id').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: {
-                    url: "{{ route('dashboard.category.all') }}", // Ensure this matches your route
-                    type: 'GET',
-                    error: function(xhr, error, thrown) {
-                        console.error('Error: ' + error);
-                        console.error('XHR: ' + xhr.responseText);
-                        alert('An error occurred while fetching data. Please try again.');
-                    }
-                },
+                ajax: "{{ Route('dashboard.category.all') }}",
                 columns: [{
                         data: 'title',
                         name: 'title'
@@ -105,7 +96,41 @@
 
                     }
                 ]
+
+
             });
+
+            // $.ajax({
+            //     url: "{{ Route('dashboard.category.all') }}",
+            //     method: 'GET',
+            //     dataType: 'json',
+            //     success: function(data) {
+            //         $('#table_id').DataTable({
+            //             data: data.data,
+            //             columns: [{
+            //                     data: 'title',
+            //                     name: 'title'
+            //                 },
+            //                 {
+            //                     data: 'parent',
+            //                     name: 'parent'
+            //                 },
+            //                 {
+            //                     data: 'action',
+            //                     name: 'action',
+            //                     orderable: false,
+            //                     searchable: false
+
+            //                 }
+            //             ]
+            //         });
+            //     },
+            //     error: function(jqXHR, textStatus, errorThrown) {
+            //         console.error('Error fetching data: ', textStatus, errorThrown);
+            //         console.log('Response Text: ', jqXHR.responseText);
+            //     }
+            // });
+
 
             // To reload data
             table.ajax.reload();

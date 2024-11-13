@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Trait\UploadImage;
 use App\Models\Category;
 use App\Models\CategoryTranslation;
 use App\Models\Setting;
@@ -12,6 +13,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
+    use UploadImage;
+
     protected $setting;
     public function __construct(Setting $setting)
     {
@@ -42,14 +45,24 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $this->authorize('viewAny', $this->setting);
-        $category = Category::create($request->except('image', '_token'));
+        $category = Category::create($request->except('_token'));
 
-        if ($request->file('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . $file->getClientOriginalName();
-            $file->move(public_path('images'), $filename);
-            $path = 'images/' . $filename;
-            $category->update(['image' => $path]);
+        // if ($request->file('image')) {
+        //     $file = $request->file('image');
+        //     $filename = Str::uuid() . $file->getClientOriginalName();
+        //     $file->move(public_path('images'), $filename);
+        //     $path = 'images/' . $filename;
+        //     $category->update(['image' => $path]);
+        // }
+        // $category->update(['user_id' => auth()->user()->id]);
+        // dd($category);
+
+        if ($request->hasFile('image')) {
+            // dd($category);
+
+            $category->update(['image' => $this->upload($request->image)]);
+            dd($category);
+
         }
 
         foreach (config('app.languages') as $key => $lang) {
@@ -66,14 +79,14 @@ class CategoryController extends Controller
     {
         $data = Category::select('*')->with('parents');
 
-        $category = Datatables::of($data)
+        return Datatables::of($data)
             ->addIndexColumn()
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
 
                 if (auth()->user()->can('viewAny', $this->setting)) {
                     return $btn = '
-                        <a href="' . Route('dashboard.category.edit', $row->id) . '"  class="edit btn btn-success btn-sm" ><i class="fa fa-edit"></i></a>
+                        <a href="' . route('dashboard.category.edit', $row->id) . '"  class="edit btn btn-success btn-sm" ><i class="fa fa-edit"></i></a>
                         <a id="deleteBtn" data-id="' . $row->id . '" class="edit btn btn-danger btn-sm"  data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></a>';
                 }
 
@@ -111,7 +124,7 @@ class CategoryController extends Controller
         $this->authorize('viewAny', $this->setting);
         $categories = Category::whereNull('parent')->orWhere('parent', 0)->get();
 
-        return view('dashboard.categories.add', compact('category', 'categories'));
+        return view('dashboard.categories.edit', compact('category', 'categories'));
     }
 
     /**
@@ -120,6 +133,16 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $this->authorize('viewAny', $this->setting);
+        // Validate the incoming request data
+        // $request->validate([
+        //     // Add your validation rules here
+        //     'title' => 'required|string|max:255', // Example rule
+        //     // 'content' => 'required|string|max:1024',
+        //     // 'slug' => 'required|string|max:255',
+        //     // 'parent' => 'required|string|max:255',
+        //     // Add other fields as necessary
+        // ]);
+
         $category->update($request->except('image', '__token'));
 
         if ($request->file('image')) {
@@ -128,21 +151,25 @@ class CategoryController extends Controller
             $file->move(public_path('images'), $filename);
             $path = 'images/' . $filename;
             $category->update(['image' => $path]);
+
         }
+        // dd($category);
 
         foreach (config('app.languages') as $key => $lang) {
             $slug = $request->$key['title'];
             CategoryTranslation::where('category_id', $category->id)->where('locale', $key)->update([
                 'slug' => $this->createSlug($slug),
+
             ]);
         }
 
-        return redirect()->route('dashboard.category.index');
+        return redirect()->route('dashboard.category.index')->with('success', 'Category updated successfully.');
 
     }
 
-    public function createSlug($text) {
-        return str_replace(' ','-',$text);
+    public function createSlug($text)
+    {
+        return str_replace(' ', '-', $text);
     }
 
     /**

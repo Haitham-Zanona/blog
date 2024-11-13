@@ -8,7 +8,7 @@
     <div class="container-fluid">
 
         <div class="animated fadeIn">
-            <form action="{{ Route('dashboard.category.update', $category) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('dashboard.category.update', $category) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -112,11 +112,11 @@
 
 
 
-                        <div class="card-footer">
+                        {{-- <div class="card-footer">
                             <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>
                                 Submit</button>
 
-                        </div>
+                        </div> --}}
 
 
 

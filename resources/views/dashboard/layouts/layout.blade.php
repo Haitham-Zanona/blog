@@ -44,7 +44,7 @@
         <div class="container-fluid">
             <button class="navbar-toggler mobile-toggler hidden-lg-up" type="button">&#9776;</button>
             <a class="navbar-brand" href="{{ route('index') }}"
-                style="background-image: url({{ asset($setting->logo) }}); background-size: 220px 180px;  background-position: center;">
+                style="background-image: url({{ asset($setting->logo) }}); background-size: 150px 50px;  background-position: center;">
                 <h4 class="text-center" {{-- style="
                 margin-top: 8px;
                 padding-right: 30px;
