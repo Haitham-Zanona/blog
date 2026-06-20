@@ -8,6 +8,8 @@ use App\Models\Category;
 use App\Models\CategoryTranslation;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -15,23 +17,18 @@ class CategoryController extends Controller
 {
     use UploadImage;
 
-    protected $setting;
+    protected Setting $setting;
+
     public function __construct(Setting $setting)
     {
         $this->setting = $setting;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('dashboard.categories.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $this->authorize('viewAny', $this->setting);
@@ -39,86 +36,66 @@ class CategoryController extends Controller
         return view('dashboard.categories.add', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $this->authorize('viewAny', $this->setting);
+        $request->validate([
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
+        ]);
+
         $category = Category::create($request->except('_token'));
 
-        // if ($request->file('image')) {
-        //     $file = $request->file('image');
-        //     $filename = Str::uuid() . $file->getClientOriginalName();
-        //     $file->move(public_path('images'), $filename);
-        //     $path = 'images/' . $filename;
-        //     $category->update(['image' => $path]);
-        // }
-        // $category->update(['user_id' => auth()->user()->id]);
-        // dd($category);
-
         if ($request->hasFile('image')) {
-            // dd($category);
-
-            $category->update(['image' => $this->upload($request->image)]);
-            dd($category);
-
+            $category->update(['image' => $this->upload($request->file('image'))]);
         }
 
-        foreach (config('app.languages') as $key => $lang) {
-            $slug = $request->$key['title'];
+        foreach (array_keys(config('app.languages')) as $key) {
+            $slug = $request->input("{$key}.title", '');
             CategoryTranslation::where('category_id', $category->id)->where('locale', $key)->update([
                 'slug' => Str::slug($slug),
             ]);
         }
+
+        Cache::forget('nav_categories');
 
         return redirect()->route('dashboard.category.index');
     }
 
     public function getCategoriesDatatable()
     {
-        $data = Category::select('*')->with('parents');
+        $data = Category::select('*')->with(['translations', 'parents.translations']);
 
         return Datatables::of($data)
             ->addIndexColumn()
-            ->addIndexColumn()
             ->addColumn('action', function ($row) {
-
-                if (auth()->user()->can('viewAny', $this->setting)) {
-                    return $btn = '
-                        <a href="' . route('dashboard.category.edit', $row->id) . '"  class="edit btn btn-success btn-sm" ><i class="fa fa-edit"></i></a>
-                        <a id="deleteBtn" data-id="' . $row->id . '" class="edit btn btn-danger btn-sm"  data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></a>';
+                if (Gate::allows('viewAny', $this->setting)) {
+                    return '<a href="' . route('dashboard.category.edit', $row->id) . '" class="edit btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+                            <a id="deleteBtn" data-id="' . $row->id . '" class="edit btn btn-danger btn-sm" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></a>';
                 }
-
             })
             ->addColumn('parent', function ($row) {
-                return ($row->parent == 0) ? trans('words.main category') : $row->parents->translate(app()->getLocale())->title;
+                if ($row->parent == 0 || $row->parents === null) {
+                    return trans('words.main category');
+                }
+                $translation = $row->parents->translate(app()->getLocale());
+                return $translation ? $translation->title : '—';
             })
             ->addColumn('title', function ($row) {
-                // return $row->translate(app()->getLocale())->title();
-                return $row->translate(app()->getLocale())->getAttribute('title');
+                $translation = $row->translate(app()->getLocale());
+                return $translation ? $translation->getAttribute('title') : '—';
             })
             ->addColumn('status', function ($row) {
-                return $row->status == null ? trans('words.not activated') : trans('words.' . $row->status);
+                return $row->status === null ? trans('words.not activated') : trans('words.' . $row->status);
             })
             ->rawColumns(['action', 'status', 'title'])
             ->make(true);
-
-        // return datatables()->of($category)->toJson();
-
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Category $category)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Category $category)
     {
         $this->authorize('viewAny', $this->setting);
@@ -127,55 +104,32 @@ class CategoryController extends Controller
         return view('dashboard.categories.edit', compact('category', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Category $category)
     {
         $this->authorize('viewAny', $this->setting);
-        // Validate the incoming request data
-        // $request->validate([
-        //     // Add your validation rules here
-        //     'title' => 'required|string|max:255', // Example rule
-        //     // 'content' => 'required|string|max:1024',
-        //     // 'slug' => 'required|string|max:255',
-        //     // 'parent' => 'required|string|max:255',
-        //     // Add other fields as necessary
-        // ]);
+        $request->validate([
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
+        ]);
 
-        $category->update($request->except('image', '__token'));
+        $category->update($request->except('image', '_token'));
 
-        if ($request->file('image')) {
-            $file = $request->file('image');
-            $filename = Str::uuid() . $file->getClientOriginalName();
-            $file->move(public_path('images'), $filename);
-            $path = 'images/' . $filename;
-            $category->update(['image' => $path]);
-
+        if ($request->hasFile('image')) {
+            $category->update(['image' => $this->upload($request->file('image'))]);
         }
-        // dd($category);
 
-        foreach (config('app.languages') as $key => $lang) {
-            $slug = $request->$key['title'];
+        foreach (array_keys(config('app.languages')) as $key) {
+            $slug = $request->input("{$key}.title", '');
             CategoryTranslation::where('category_id', $category->id)->where('locale', $key)->update([
-                'slug' => $this->createSlug($slug),
-
+                'slug' => Str::slug($slug),
             ]);
         }
 
+        Cache::forget('nav_categories');
+
         return redirect()->route('dashboard.category.index')->with('success', 'Category updated successfully.');
-
     }
 
-    public function createSlug($text)
-    {
-        return str_replace(' ', '-', $text);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
         //
     }
@@ -187,6 +141,9 @@ class CategoryController extends Controller
             Category::where('parent', $request->id)->delete();
             Category::where('id', $request->id)->delete();
         }
+
+        Cache::forget('nav_categories');
+
         return redirect()->route('dashboard.category.index');
     }
 }

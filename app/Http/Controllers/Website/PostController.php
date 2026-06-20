@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
-    public function show(Post $post) {
+    public function show(Post $post)
+    {
+        $post->load(['translations', 'category.translations']);
         return view('website.post', compact('post'));
     }
 }

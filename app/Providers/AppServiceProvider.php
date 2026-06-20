@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Setting;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,9 +26,19 @@ class AppServiceProvider extends ServiceProvider
     {
         if (!app()->runningInConsole()) {
             Paginator::useBootstrap();
-            $settings = Setting::checkSettings();
-            $categories = Category::with('children')->where('parent', 0)->orWhere('parent', null)->get();
-            $lastFivePosts = Post::with('category', 'user')->orderBy('id')->limit(5)->get();
+
+            $settings = Cache::remember('site_settings', now()->addHours(2), fn() => Setting::checkSettings());
+
+            $categories = Cache::remember('nav_categories', now()->addHours(2), fn() =>
+                Category::with(['children', 'translations', 'children.translations'])
+                    ->where(fn($q) => $q->where('parent', 0)->orWhereNull('parent'))
+                    ->get()
+            );
+
+            $lastFivePosts = Cache::remember('last_five_posts', now()->addMinutes(30), fn() =>
+                Post::with(['category.translations', 'user'])->orderBy('id', 'desc')->limit(5)->get()
+            );
+
             view()->share([
                 'setting' => $settings,
                 'categories' => $categories,

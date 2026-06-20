@@ -10,9 +10,10 @@ class CategoryController extends Controller
 {
     public function show(Category $category)
     {
-        $category = $category->load('children');
-        // dd($category);
-        $posts = Post::where('category_id', $category->id)->paginate(15);
+        $category->load(['translations', 'children.translations']);
+        $posts = Post::where('category_id', $category->id)
+            ->with('translations')
+            ->paginate(15);
 
         return view('website.category', compact('category', 'posts'));
     }

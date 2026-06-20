@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 class UserController extends Controller
@@ -21,8 +21,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::all();
-        return view('dashboard.users.index', compact('users'));
+        return view('dashboard.users.index');
     }
 
     /**
@@ -72,7 +71,7 @@ class UserController extends Controller
         $data = [
             'name' => 'required|string',
             'status' => 'nullable|in:null,admin,writer',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email:rfc|unique:users',
             'password' => 'required',
         ];
         $validatedData = $request->validate($data);
@@ -108,7 +107,26 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->authorize('update', $user);
-        $user->update($request->all());
+
+        $validated = $request->validate([
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'email:rfc', 'unique:users,email,' . $user->id],
+            'status'   => ['nullable', 'in:admin,writer'],
+            'password' => ['nullable', 'string', 'min:8'],
+        ]);
+
+        $data = [
+            'name'   => $validated['name'],
+            'email'  => $validated['email'],
+            'status' => $validated['status'] ?? null,
+        ];
+
+        if (!empty($validated['password'])) {
+            $data['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($data);
+
         return redirect()->route('dashboard.users.index');
     }
 

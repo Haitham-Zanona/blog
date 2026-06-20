@@ -5,51 +5,30 @@ use App\Http\Controllers\Dashboard\PostsController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Website\CategoryController as WebsiteCategoryController;
 use App\Http\Controllers\Website\IndexController;
 use App\Http\Controllers\Website\PostController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
- */
-
 // Website
-
 Route::get('/', [IndexController::class, 'index'])->name('index');
-Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('category');
+Route::get('/categories/{category}', [WebsiteCategoryController::class, 'show'])->name('category');
 Route::get('/post/{post}', [PostController::class, 'show'])->name('post');
 
-// Dashboard
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+// Profile
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Dashboard
 Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => ['auth', 'checkLogin']], function () {
-    Route::get('/', function () {
-        return view('dashboard.layouts.layout');
-    })->name('dashboard');
-    Route::get('/charts', function () {
-        return view('dashboard.layouts.charts');
-    })->name('charts');
+    Route::get('/', fn() => view('dashboard.layouts.layout'))->name('dashboard');
+    Route::get('/charts', fn() => view('dashboard.layouts.charts'))->name('charts');
 
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
-    Route::post('/settings/update/{setting}', [SettingController::class, 'update'])
-        ->name('settings.update');
+    Route::post('/settings/update/{setting}', [SettingController::class, 'update'])->name('settings.update');
 
     Route::get('/users/all', [UserController::class, 'getUsersDatatable'])->name('users.all');
     Route::post('/users/delete', [UserController::class, 'delete'])->name('users.delete');
@@ -61,15 +40,10 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => ['a
     Route::post('/posts/delete', [PostsController::class, 'delete'])->name('posts.delete');
 
     Route::resources([
-        'users' => UserController::class,
+        'users'    => UserController::class,
         'category' => CategoryController::class,
-        'posts' => PostsController::class,
+        'posts'    => PostsController::class,
     ]);
-
 });
 
 require __DIR__ . '/auth.php';
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
